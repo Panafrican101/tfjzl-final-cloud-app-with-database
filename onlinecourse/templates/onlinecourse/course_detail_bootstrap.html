@@ -51,6 +51,42 @@
                 {% endfor %}
             </div>
             <!-- Course detail template changes go here -->
+            {% if user.is_authenticated %}
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5>Course Exam</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">This exam contains multiple questions. Each question may have more than one correct answer.</p>
+                        <button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#exam" aria-expanded="false" aria-controls="exam">
+                            Start Exam
+                        </button>
+                        <div class="collapse mt-3" id="exam">
+                            <form action="#" method="post">
+                                {% csrf_token %}
+                                {% for question in course.question_set.all %}
+                                    <div class="card mt-2">
+                                        <div class="card-header">
+                                            <h6>{{ question.content }}</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            {% for choice in question.choice_set.all %}
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="choice{{ choice.id }}" id="choice{{ choice.id }}" value="{{ choice.id }}">
+                                                    <label class="form-check-label" for="choice{{ choice.id }}">
+                                                        {{ choice.content }}
+                                                    </label>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                <button class="btn btn-primary mt-3" type="submit">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
     </div>
 </body>
 </html>
